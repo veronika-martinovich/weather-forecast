@@ -55,7 +55,6 @@ body {
 
 .main-indicators {
     width: 40%;
-    margin-left: 6%;
     margin-top: 7%;
     height: 15vh;
     line-height: 4vh;
@@ -79,7 +78,7 @@ body {
 .future-forecast {
     display: flex;
     flex-flow: row wrap; 
-    width: 60%; 
+    width: 50%; 
     margin-left: 5%;
     margin-top: 3%;
     font-family: Montserrat;
@@ -94,8 +93,8 @@ body {
     flex-flow: row wrap;
     align-items: flex-start;
     justify-content: center;
-    margin-right: 3%;
-    width: 15%;
+    margin-right: 2%;
+    width: 17%;
 }
 
 .future-day {
@@ -107,11 +106,10 @@ body {
 .future-temperature {
     display: flex;
     align-items: flex-start;
-    /* width: 60%; */
     font-size: 70px;
     font-weight: 500;
 }
 
 .future-indicators img {
-    width: 40%;
+    width: 35%;
 }
