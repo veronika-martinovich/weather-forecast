@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,400i,500,700,700i,800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js"></script>
+    <script src="https://api-maps.yandex.ru/2.1/?apikey=d7b4c21b-086e-4acd-8ab6-5ef522b660d4&lang=ru_RU" type="text/javascript">
+    </script>
+</head>
+<body>
+    <main>
+        <div class="current-forecast">
+            <div class="place">
+                <div class="city"></div>
+                <div class="country"></div>
+            </div>
+            <div class="date-time"></div>
+            <div class="temperature">
+                <div class="degrees"></div>
+                <img class="weather-icon"></img>
+            </div>
+            <div class="main-indicators">
+                <div class="wind-speed"></div>
+                <div class="wind-direction"></div>
+                <div class="humidity"></div>
+                <div class="pressure"></div>
+                <div class="weather-indicators"></div>
+            </div>
+            </div>
+        </div>
+
+        <div class="future-forecast"></div>
+
+        <div id="yandex-map" class="yandex-map"></div>
+
+    </main>
+
+    
+</body>
+</html>

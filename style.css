@@ -1,0 +1,117 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: #575454;
+    background-image: url('https://pluviophile.net/wp-content/uploads/cloudy-weather-wallpaper.jpg');
+}
+
+.current-forecast {
+    display: flex;
+    flex-flow: row wrap;
+    margin-left: 5%;
+    margin-top: 10%;
+    width: 40%;
+    height: 40vh;
+    font-family: Montserrat;
+    letter-spacing: 0.07vw;
+    color: #ffffff;
+}
+
+.place, .temperature, .weather-indicators {
+    text-transform: uppercase;
+}
+
+.place {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    font-weight: bold;
+}
+
+.city, .country {
+    font-size: 30px;
+    margin-right: 3%;
+}
+
+.date-time {
+    width: 100%;
+    margin-right: 3%;
+    margin-top: 1%; 
+    font-size: 18px;
+    font-weight: 500;
+}
+
+.temperature {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: flex-start;
+    font-size: 200px;
+    font-weight: 500;
+}
+
+.main-indicators {
+    width: 40%;
+    margin-left: 6%;
+    margin-top: 7%;
+    height: 15vh;
+    line-height: 4vh;
+    font-size: 15px;
+    font-weight: 500;
+}
+
+.weather-indicators {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+
+.yandex-map {
+    margin-top: -20%;
+    margin-left: 70%;
+    width: 20%;
+    height: 40vh;
+}
+
+.future-forecast {
+    display: flex;
+    flex-flow: row wrap; 
+    width: 60%; 
+    margin-left: 5%;
+    margin-top: 3%;
+    font-family: Montserrat;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.1vw;
+    color: #ffffff;  
+}
+
+.future-indicators {
+    display: flex;
+    flex-flow: row wrap;
+    align-items: flex-start;
+    justify-content: center;
+    margin-right: 3%;
+    width: 15%;
+}
+
+.future-day {
+    width: 100%;
+    font-weight: bold;
+    text-align: center;
+}
+
+.future-temperature {
+    display: flex;
+    align-items: flex-start;
+    /* width: 60%; */
+    font-size: 70px;
+    font-weight: 500;
+}
+
+.future-indicators img {
+    width: 40%;
+}
