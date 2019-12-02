@@ -144,7 +144,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
             console.log(index);
             let dayCounter = 1;
-            for (j = index; j < xhrFuture.response.list.length; j += 8) {
+            for (j = index + 4; j < xhrFuture.response.list.length; j += 8) {
                 let futureIndicators = document.createElement('div');
                 futureIndicators.classList.add('future-indicators');
                 let futureDay = document.createElement('div');
