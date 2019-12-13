@@ -22,129 +22,127 @@ document.addEventListener('DOMContentLoaded', function () {
         return i;
     } 
 
-
-    setInterval(setDateTime, 1000);
+    /* Clock */
     function setDateTime () {
         let date = new Date();
         dateTime.textContent = `${days[date.getDay()]}  ${date.getDate()}  ${months[date.getMonth()]}  ${checkZeros(date.getHours())}:${checkZeros(date.getMinutes())}:${checkZeros(date.getSeconds())}`;
     }
+    setInterval(setDateTime, 1000);
 
-    
-    navigator.geolocation.getCurrentPosition(getWeather, noCoords);
-    function noCoords() {
-        console.log('Нет доступа к координатам');
-    }
-    
-    function getWeather(position) {
-    
-    let xhrCoords = new XMLHttpRequest();
-    let lat = position.coords.latitude;
-    let lon = position.coords.longitude;
-    xhrCoords.open('GET', `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}`);
-    xhrCoords.responseType = 'json';
-    xhrCoords.send();
+    /* User coordinates */
+    let promise = new Promise(function (resolve, reject){
+        navigator.geolocation.getCurrentPosition(function(position) {
+            resolve(position);
+        }, 
+        function() {
+            reject('Нет доступа к координатам');
+        });
+    })
 
-    xhrCoords.onload = function () {
-        if (xhrCoords.status != 200) {
-            console.log(`Ошибка ${xhrCoords.status}:${xhrCoords.statusText}`);
-        } else {
-            console.log(xhrCoords.response);
-            city.textContent = `${xhrCoords.response.name},`;
-            country.textContent = `${xhrCoords.response.sys.country}`;
-            degrees.textContent = `${xhrCoords.response.main.temp - 273.15}`;
-            weatherIcon.setAttribute('src', `http://openweathermap.org/img/wn/${xhrCoords.response.weather[0].icon}@2x.png`);
-            windSpeed.textContent = `WIND: ${xhrCoords.response.wind.speed} m/s`;
-            windDirection.textContent = `DIRECTION: ${setupWindDirection(xhrCoords.response)}`;
-            humidity.textContent = `HUMIDITY: ${xhrCoords.response.main.humidity}%`;
-            pressure.textContent = `PRESSURE: ${xhrCoords.response.main.pressure} mm Hg`;
-
-            xhrCoords.response.weather.forEach(function (item) {
+    /* Todays weather */
+    promise.then(
+        position => {
+            return new Promise(function(resolve){
+                let lat = position.coords.latitude;
+                let lon = position.coords.longitude;
+                fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}`)
+                .then(
+                    response => resolve(response.json())
+                )
+            })
+        },
+        error => {
+            console.log(error)
+        }
+    )
+    .then(
+        result => {
+            console.log(result);
+            city.textContent = `${result.name},`;
+            country.textContent = `${result.sys.country}`;
+            degrees.textContent = `${result.main.temp - 273.15}`;
+            weatherIcon.setAttribute('src', `http://openweathermap.org/img/wn/${result.weather[0].icon}@2x.png`);
+            windSpeed.textContent = `WIND: ${result.wind.speed} m/s`;
+            windDirection.textContent = `DIRECTION: ${setupWindDirection(result)}`;
+            humidity.textContent = `HUMIDITY: ${result.main.humidity}%`;
+            pressure.textContent = `PRESSURE: ${result.main.pressure} mm Hg`;
+            result.weather.forEach(function (item) {
                 let weather = document.createElement('div');
                 weather.classList.add('weather');
                 weatherIndicators.append(weather);
                 weather.textContent = `${item.main}`;
-            })
-        }
-    }
-      
-    xhrCoords.onerror = function() {
-        console.log("Запрос не удался");
-        }
+                })
 
-    function setupWindDirection (obj) {
-        if (obj.wind.deg >=0 && obj.wind.deg < 22) {
-            return 'N';
-        }
-        if (obj.wind.deg >=22 && obj.wind.deg < 67) {
-            return 'N-E';
-        }
-        if (obj.wind.deg >=67 && obj.wind.deg < 112) {
-            return 'E';
-        }
-        if (obj.wind.deg >=112 && obj.wind.deg < 157) {
-            return 'S-E';
-        }
-        if (obj.wind.deg >=157 && obj.wind.deg < 202) {
-            return 'S';
-        }
-        if (obj.wind.deg >=202 && obj.wind.deg < 247) {
-            return 'S-W';
-        }
-        if (obj.wind.deg >=247 && obj.wind.deg < 292) {
-            return 'W';
-        }
-        if (obj.wind.deg >=292 && obj.wind.deg < 337) {
-            return 'N-W';
-        }
-        if (obj.wind.deg >=337 && obj.wind.deg <= 360) {
-            return 'N';
-        }
-      }
-
-    ymaps.ready(init);
-        function init(){
-        let myMap = new ymaps.Map("yandex-map", {
-        center: [lat, lon],
-        zoom: 16,
-        controls: ['routeButtonControl', 'trafficControl', 'fullscreenControl']
-            });
-            
-        let myPlacemark = new ymaps.GeoObject({
-            geometry: {
-                type: "Point",
-                coordinates: [lat, lon]
+            function setupWindDirection (obj) {
+                if (obj.wind.deg >=0 && obj.wind.deg < 22) {
+                    return 'N';
                 }
-            });
+                if (obj.wind.deg >=22 && obj.wind.deg < 67) {
+                     return 'N-E';
+                }
+                if (obj.wind.deg >=67 && obj.wind.deg < 112) {
+                    return 'E';
+                }
+                if (obj.wind.deg >=112 && obj.wind.deg < 157) {
+                    return 'S-E';
+                }
+                if (obj.wind.deg >=157 && obj.wind.deg < 202) {
+                     return 'S';
+                }
+                if (obj.wind.deg >=202 && obj.wind.deg < 247) {
+                    return 'S-W';
+                }
+                if (obj.wind.deg >=247 && obj.wind.deg < 292) {
+                    return 'W';
+                }
+                if (obj.wind.deg >=292 && obj.wind.deg < 337) {
+                    return 'N-W';
+                }
+                if (obj.wind.deg >=337 && obj.wind.deg <= 360) {
+                    return 'N';
+                }
+            }
+        }, 
+        error => {
+            console.log(error);
+        }
+    )
 
-        myMap.geoObjects.add(myPlacemark); 
-        }  
-
-    
-    let xhrFuture = new XMLHttpRequest();
-    xhrFuture.open('GET', `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&APPID=${apiKey}`);
-    xhrFuture.responseType = 'json';
-    xhrFuture.send();
-
-    xhrFuture.onload = function () {
-        if (xhrFuture.status != 200) {
-            console.log(`Ошибка ${xhrFuture.status}:${xhrFuture.statusText}`);
-        } else {
-            console.log(xhrFuture.response);
+    /* Next 4 days weather */
+    promise.then(
+        position => {
+            return new Promise(function (resolve) {
+                let lat = position.coords.latitude;
+                let lon = position.coords.longitude;
+                fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&APPID=${apiKey}`)
+                .then(
+                    response => resolve(response.json())
+                )
+            })
+        },
+        error => {
+            console.log(error);
+        }
+    )
+    .then(
+        result => {
+            console.log(result);
             let newDate = new Date();
             let tomorrow = new Date(`${newDate.getFullYear()}`, `${newDate.getMonth()}`, `${newDate.getDate()+1}`);
             let tomorrowTxt = `${tomorrow.getFullYear()}-${checkZeros(tomorrow.getMonth()+1)}-${checkZeros(tomorrow.getDate())}`;
             console.log(tomorrowTxt);
+            
             let index;
-
-            for (let i = 0; i < xhrFuture.response.list.length; i++) {
-                if (xhrFuture.response.list[i].dt_txt.indexOf(tomorrowTxt) != -1) {
+            for (let i = 0; i < result.list.length; i++) {
+                if (result.list[i].dt_txt.indexOf(tomorrowTxt) != -1) {
                     index = i;
                     break;
                 }
             }
             console.log(index);
+            
             let dayCounter = 1;
-            for (j = index + 4; j < xhrFuture.response.list.length; j += 8) {
+            for (j = index + 4; j < result.list.length; j += 8) {
                 let futureIndicators = document.createElement('div');
                 futureIndicators.classList.add('future-indicators');
                 let futureDay = document.createElement('div');
@@ -152,19 +150,45 @@ document.addEventListener('DOMContentLoaded', function () {
                 let futureTemperature = document.createElement('div');
                 futureTemperature.classList.add('future-temperature');
                 let futureIcon = document.createElement('img');
-                futureIcon.setAttribute('src', `http://openweathermap.org/img/wn/${xhrFuture.response.list[j].weather[0].icon}@2x.png`);
+                futureIcon.setAttribute('src', `http://openweathermap.org/img/wn/${result.list[j].weather[0].icon}@2x.png`);
                 let weekDay = new Date(`${newDate.getFullYear()}`, `${newDate.getMonth()}`, `${newDate.getDate() + dayCounter}`);
                 futureDay.textContent = `${days[weekDay.getDay()]}`;
-                futureTemperature.textContent = `${Math.round(xhrFuture.response.list[j].main.temp - 273.15)}`;
-                futureIndicators.append(futureDay);
-                futureIndicators.append(futureTemperature);
-                futureIndicators.append(futureIcon);
+                futureTemperature.textContent = `${Math.round(result.list[j].main.temp - 273.15)}`;
+                futureIndicators.append(futureDay, futureTemperature, futureIcon);
                 futureForecast.append(futureIndicators);
                 dayCounter++;
-            }
-
-
-            }
+            }     
+        },
+        error => {
+            console.log(error);
         }
-    }   
+    )
+
+    /* Map */
+    promise.then(
+        position => {
+            let lat = position.coords.latitude;
+            let lon = position.coords.longitude;
+            ymaps.ready(init);
+            function init(){
+            let myMap = new ymaps.Map("yandex-map", {
+            center: [lat, lon],
+            zoom: 16,
+            controls: ['routeButtonControl', 'trafficControl', 'fullscreenControl']
+            });
+            
+            let myPlacemark = new ymaps.GeoObject({
+                geometry: {
+                    type: "Point",
+                    coordinates: [lat, lon]
+                    }
+                });
+
+            myMap.geoObjects.add(myPlacemark); 
+            }
+        },
+        error => {
+            console.log(error);
+        }
+    )      
 })
