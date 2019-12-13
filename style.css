@@ -58,8 +58,6 @@ body {
 .main-indicators {
     width: 50%;
     margin-top: 7%;
-    height: 15vh;
-    line-height: 4vh;
     font-size: 15px;
     font-weight: 500;
 }
